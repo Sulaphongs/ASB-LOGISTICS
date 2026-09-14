@@ -1,0 +1,119 @@
+/* ASB Logistics — ຮູບແບບຫຼັກ (ດັດແປງໂຕນສີ dark+gold ຈາກ ptpos.shop/partials/sidebar.php) */
+:root{
+  --asb-gold:#e8c73c;
+  --asb-dark:#181818;
+  --asb-bg:#f4f5f7;
+  --asb-card:#ffffff;
+  --asb-border:#e5e7eb;
+  --asb-text:#1f2430;
+  --asb-muted:#6b7280;
+  --asb-green:#16a34a;
+  --asb-red:#dc2626;
+  --asb-blue:#2563eb;
+}
+*{box-sizing:border-box;}
+body.asb-body{
+  margin:0;background:var(--asb-bg);color:var(--asb-text);
+  font-family:'Noto Sans Lao','Segoe UI',sans-serif;
+}
+
+/* ── Sidebar toggle button / overlay ── */
+#_sb_btn{
+  position:fixed;top:12px;left:12px;z-index:9999;
+  width:44px;height:44px;border-radius:12px;
+  background:var(--asb-dark);border:1.5px solid rgba(232,199,60,.5);
+  color:var(--asb-gold);font-size:20px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 18px rgba(0,0,0,.35);
+  transition:background .2s,transform .12s;
+}
+#_sb_btn:hover{background:#252525;}
+#_sb_btn:active{transform:scale(.92);}
+#_sb_ov{position:fixed;inset:0;z-index:9990;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .3s;}
+#_sb_ov.on{opacity:1;pointer-events:auto;}
+
+/* ── Sidebar panel ── */
+#_sb_panel{
+  position:fixed;top:0;left:0;width:264px;height:100vh;z-index:9995;
+  background:linear-gradient(180deg,#1f1f1f 0%,#181818 55%,#111 100%);
+  color:#f0ede6;display:flex;flex-direction:column;
+  transform:translateX(-100%);transition:transform .35s cubic-bezier(.65,.05,.36,1);
+  border-right:1px solid rgba(232,199,60,.12);
+}
+#_sb_panel.on{transform:translateX(0);}
+#_sb_panel ._sb_brand{display:flex;align-items:center;gap:12px;padding:16px;border-bottom:1px solid rgba(232,199,60,.2);background:rgba(232,199,60,.04);}
+#_sb_panel ._sb_logo_txt{
+  width:44px;height:44px;border-radius:12px;flex-shrink:0;
+  background:var(--asb-gold);color:#181818;font-weight:800;font-size:.95rem;
+  display:flex;align-items:center;justify-content:center;letter-spacing:.5px;
+}
+#_sb_panel ._sb_title{font-size:1.02rem;font-weight:800;color:var(--asb-gold);line-height:1.25;}
+#_sb_panel ._sb_sub{font-size:.66rem;color:rgba(255,255,255,.45);}
+#_sb_panel ._sb_nav{flex:1;overflow-y:auto;padding:14px 10px;}
+#_sb_panel ._sb_group{margin-bottom:16px;}
+#_sb_panel ._sb_glabel{font-size:.6rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(232,199,60,.55);margin:0 0 8px 10px;}
+#_sb_panel ._sb_ul{list-style:none;display:flex;flex-direction:column;gap:4px;margin:0;padding:0;}
+#_sb_panel ._sb_a{
+  display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:11px;
+  color:#f0ede6;text-decoration:none;font-size:.9rem;font-weight:500;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+  transition:background .2s,border-color .2s,color .2s,transform .15s;
+}
+#_sb_panel ._sb_a:hover{background:rgba(232,199,60,.12);border-color:rgba(232,199,60,.3);color:var(--asb-gold);transform:translateX(3px);}
+#_sb_panel ._sb_a.active{background:rgba(232,199,60,.18);border-color:rgba(232,199,60,.45);color:var(--asb-gold);}
+
+/* ── Main layout ── */
+.asb-main{padding-left:0;transition:padding-left .3s;}
+.asb-topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 20px 14px 64px;background:var(--asb-card);border-bottom:1px solid var(--asb-border);
+  position:sticky;top:0;z-index:50;
+}
+.asb-topbar-title{font-weight:700;font-size:1.05rem;}
+.asb-topbar-user{display:flex;align-items:center;gap:8px;font-size:.9rem;color:var(--asb-muted);}
+.asb-topbar-user a{color:var(--asb-red);margin-left:6px;}
+.asb-content{padding:20px;max-width:1280px;margin:0 auto;}
+
+/* ── Cards / tables (used across pages) ── */
+.asb-card{background:var(--asb-card);border:1px solid var(--asb-border);border-radius:14px;padding:18px;}
+.asb-stat{background:var(--asb-card);border:1px solid var(--asb-border);border-radius:14px;padding:16px 18px;}
+.asb-stat .num{font-size:1.5rem;font-weight:800;}
+.asb-stat .label{font-size:.8rem;color:var(--asb-muted);}
+table.asb-table{width:100%;border-collapse:collapse;font-size:.9rem;}
+table.asb-table th{text-align:left;padding:10px 12px;background:#f8f9fb;border-bottom:1px solid var(--asb-border);font-weight:600;color:var(--asb-muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.4px;}
+table.asb-table td{padding:10px 12px;border-bottom:1px solid var(--asb-border);vertical-align:middle;}
+table.asb-table tr:hover td{background:#fafbfc;}
+
+.asb-badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:.75rem;font-weight:600;}
+.asb-badge.ordered{background:#e0e7ff;color:#4338ca;}
+.asb-badge.arrived_cn_warehouse{background:#fef3c7;color:#92400e;}
+.asb-badge.shipped{background:#dbeafe;color:#1d4ed8;}
+.asb-badge.arrived_la_warehouse{background:#fae8ff;color:#a21caf;}
+.asb-badge.out_for_delivery{background:#ffedd5;color:#c2410c;}
+.asb-badge.delivered{background:#dcfce7;color:#15803d;}
+.asb-badge.cancelled{background:#fee2e2;color:#b91c1c;}
+.asb-badge.paid{background:#dcfce7;color:#15803d;}
+.asb-badge.partial{background:#fef3c7;color:#92400e;}
+.asb-badge.unpaid{background:#fee2e2;color:#b91c1c;}
+
+.asb-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:9px;font-size:.88rem;font-weight:600;border:1px solid transparent;cursor:pointer;text-decoration:none;}
+.asb-btn-primary{background:var(--asb-dark);color:var(--asb-gold);border-color:var(--asb-dark);}
+.asb-btn-primary:hover{background:#000;}
+.asb-btn-light{background:#fff;color:var(--asb-text);border-color:var(--asb-border);}
+.asb-btn-light:hover{background:#f3f4f6;}
+.asb-btn-danger{background:#fee2e2;color:var(--asb-red);}
+.asb-btn-sm{padding:5px 10px;font-size:.8rem;}
+
+.asb-modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9980;display:flex;align-items:center;justify-content:center;padding:16px;}
+.asb-modal{background:#fff;border-radius:16px;max-width:560px;width:100%;max-height:90vh;overflow-y:auto;padding:22px;}
+.asb-field{margin-bottom:12px;}
+.asb-field label{display:block;font-size:.82rem;font-weight:600;margin-bottom:5px;color:var(--asb-muted);}
+.asb-field input, .asb-field select, .asb-field textarea{
+  width:100%;padding:9px 11px;border:1px solid var(--asb-border);border-radius:9px;font-size:.9rem;font-family:inherit;
+}
+.asb-field input:focus, .asb-field select:focus, .asb-field textarea:focus{outline:2px solid var(--asb-gold);border-color:var(--asb-gold);}
+
+@media (max-width:640px){
+  .asb-content{padding:14px;}
+  .asb-topbar{padding-left:60px;}
+}
