@@ -77,7 +77,7 @@ export default function PackageDetail() {
   };
 
   if (!pkg) {
-    return <Layout title="ລາຍລະອຽດພັດສະດຸ"><div className="text-slate-400 text-sm">ກຳລັງໂຫຼດ...</div></Layout>;
+    return <Layout title="ລາຍລະອຽດພັດສະດຸ"><div className="text-slate-400 dark:text-slate-500 text-sm">ກຳລັງໂຫຼດ...</div></Layout>;
   }
 
   const currentIdx = STATUS_FLOW.indexOf(pkg.status);
@@ -96,11 +96,11 @@ export default function PackageDetail() {
           <div className="flex justify-between items-start flex-wrap gap-2">
             <div>
               <h2 className="text-lg font-bold">{pkg.tracking_code}</h2>
-              <p className="text-sm text-slate-500">{pkg.item_description || 'ບໍ່ມີລາຍລະອຽດ'}</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">{pkg.item_description || 'ບໍ່ມີລາຍລະອຽດ'}</p>
             </div>
             <Badge status={pkg.status}>{pkg.status_label}</Badge>
           </div>
-          <hr className="my-4 border-slate-100" />
+          <hr className="my-4 border-slate-100 dark:border-slate-700" />
           <div className="grid grid-cols-2 gap-3 text-sm">
             <div><strong>ລູກຄ້າ:</strong> {pkg.customer_name} ({pkg.customer_code})</div>
             <div><strong>ເບີໂທ:</strong> {pkg.customer_phone}</div>
@@ -115,7 +115,7 @@ export default function PackageDetail() {
             <p className="mt-3 text-sm"><strong>ລິ້ງຮ້ານ:</strong> <a href={pkg.shop_link} target="_blank" rel="noopener noreferrer" className="text-teal-700 hover:underline">{pkg.shop_link}</a></p>
           )}
           {pkg.notes && <p className="mt-3 text-sm"><strong>ໝາຍເຫດ:</strong> {pkg.notes}</p>}
-          <hr className="my-4 border-slate-100" />
+          <hr className="my-4 border-slate-100 dark:border-slate-700" />
           <div className="grid grid-cols-2 gap-3 text-sm">
             <div><strong>ຄ່າຂົນສົ່ງ:</strong> {formatMoney(pkg.shipping_fee, pkg.currency)}</div>
             <div><strong>ຄ່າອື່ນໆ:</strong> {formatMoney(pkg.other_fee, pkg.currency)}</div>
@@ -134,7 +134,7 @@ export default function PackageDetail() {
               <img
                 src={`/${pkg.photo_path}?t=${Date.now()}`}
                 alt="ຮູບພັດສະດຸ"
-                className="max-w-full max-h-80 rounded-xl border border-slate-200 block"
+                className="max-w-full max-h-80 rounded-xl border border-slate-200 dark:border-slate-600 block"
               />
               <button className="btn btn-danger btn-sm mt-2" onClick={handleDeletePhoto}><Trash2 className="w-4 h-4" /> ລຶບຮູບ</button>
             </div>
@@ -151,7 +151,7 @@ export default function PackageDetail() {
                   {uploading ? 'ກຳລັງອັບໂຫລດ...' : <><Upload className="w-4 h-4" /> ອັບໂຫລດ</>}
                 </button>
               </div>
-              <p className="text-xs text-slate-400 mt-2">JPG, PNG, WEBP — ສູງສຸດ 5MB</p>
+              <p className="text-xs text-slate-400 dark:text-slate-500 mt-2">JPG, PNG, WEBP — ສູງສຸດ 5MB</p>
             </div>
           )}
         </div>
@@ -174,11 +174,11 @@ export default function PackageDetail() {
           )}
 
           <div className="space-y-3">
-            {timeline.length === 0 && <p className="text-sm text-slate-400">ຍັງບໍ່ມີປະຫວັດ</p>}
+            {timeline.length === 0 && <p className="text-sm text-slate-400 dark:text-slate-500">ຍັງບໍ່ມີປະຫວັດ</p>}
             {timeline.map((t) => (
               <div key={t.id} className="border-l-2 border-teal-500 pl-3">
                 <div className="text-sm font-semibold">{t.status_label}</div>
-                <div className="text-[11px] text-slate-400">
+                <div className="text-[11px] text-slate-400 dark:text-slate-500">
                   {new Date(t.created_at).toLocaleString('lo-LA')} {t.changed_by_name ? `— ${t.changed_by_name}` : ''}
                 </div>
                 {t.note && <div className="text-xs mt-0.5">{t.note}</div>}

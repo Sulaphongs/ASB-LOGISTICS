@@ -23,11 +23,11 @@ export function ConfirmProvider({ children }) {
       {state && (
         <div className="modal-backdrop">
           <div className="modal-box max-w-sm">
-            <div className="w-10 h-10 rounded-full bg-rose-50 flex items-center justify-center mb-3">
-              <AlertTriangle className="w-5 h-5 text-rose-500" aria-hidden="true" />
+            <div className="w-10 h-10 rounded-full bg-rose-50 dark:bg-rose-500/10 flex items-center justify-center mb-3">
+              <AlertTriangle className="w-5 h-5 text-rose-500 dark:text-rose-400" aria-hidden="true" />
             </div>
-            <h3 className="text-base font-bold mb-2">{state.title}</h3>
-            <p className="text-sm text-slate-600 mb-5">{state.text}</p>
+            <h3 className="text-base font-bold mb-2 text-slate-800 dark:text-slate-100">{state.title}</h3>
+            <p className="text-sm text-slate-600 dark:text-slate-300 mb-5">{state.text}</p>
             <div className="flex gap-3">
               <button className="btn btn-light flex-1" onClick={() => handle(false)}><X className="w-4 h-4" /> ຍົກເລີກ</button>
               <button className="btn btn-danger flex-1" onClick={() => handle(true)}><Trash2 className="w-4 h-4" /> ຢືນຢັນ</button>

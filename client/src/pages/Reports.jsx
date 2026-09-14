@@ -56,7 +56,7 @@ export default function Reports() {
               </tr>
             </thead>
             <tbody>
-              {rows.length === 0 && <tr><td colSpan={9} className="text-center text-slate-400 py-6">ບໍ່ມີຂໍ້ມູນ</td></tr>}
+              {rows.length === 0 && <tr><td colSpan={9} className="text-center text-slate-400 dark:text-slate-500 py-6">ບໍ່ມີຂໍ້ມູນ</td></tr>}
               {rows.map((p) => (
                 <tr key={p.id}>
                   <td className="font-semibold">{p.tracking_code}</td>

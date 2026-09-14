@@ -57,7 +57,7 @@ export default function Users() {
               <tr><th>ຊື່ຜູ້ໃຊ້</th><th>ຊື່ເຕັມ</th><th>ເບີໂທ</th><th>ບົດບາດ</th><th>ສະຖານະ</th><th className="text-right">ຈັດການ</th></tr>
             </thead>
             <tbody>
-              {users.length === 0 && <tr><td colSpan={6} className="text-center text-slate-400 py-6">ບໍ່ມີຂໍ້ມູນ</td></tr>}
+              {users.length === 0 && <tr><td colSpan={6} className="text-center text-slate-400 dark:text-slate-500 py-6">ບໍ່ມີຂໍ້ມູນ</td></tr>}
               {users.map((u) => (
                 <tr key={u.id}>
                   <td className="font-semibold">{u.username}</td>

@@ -10,7 +10,7 @@ const router = Router();
 
 router.get('/settings', async (req, res) => {
   const [rows] = await pool.query(
-    "SELECT setting_key, setting_value FROM settings WHERE setting_key IN ('company_name','company_phone')"
+    "SELECT setting_key, setting_value FROM settings WHERE setting_key IN ('company_name','company_phone','company_logo')"
   );
   const settings = Object.fromEntries(rows.map((r) => [r.setting_key, r.setting_value]));
   res.json({ success: true, settings });

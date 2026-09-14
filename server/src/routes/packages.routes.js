@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import multer from 'multer';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -7,21 +6,13 @@ import { pool } from '../db.js';
 import { requireAuth } from '../middleware/auth.js';
 import { generateTrackingCode, statusLabel, PACKAGE_STATUS_LABELS, toNumberOrNull } from '../utils/helpers.js';
 import { logActivity } from '../utils/activityLogger.js';
+import { createImageUpload, handleUploadErrors, ALLOWED_IMAGE_MIME } from '../middleware/upload.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const UPLOAD_DIR = path.join(__dirname, '../../uploads/packages');
-const ALLOWED_MIME = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' };
+const ALLOWED_MIME = ALLOWED_IMAGE_MIME;
 
-const upload = multer({
-  storage: multer.memoryStorage(),
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
-  fileFilter: (req, file, cb) => {
-    if (!ALLOWED_MIME[file.mimetype]) {
-      return cb(new Error('ຮອງຮັບສະເພາະ JPG, PNG, WEBP'));
-    }
-    cb(null, true);
-  },
-});
+const upload = createImageUpload();
 
 const router = Router();
 router.use(requireAuth);
@@ -202,16 +193,7 @@ router.post('/:id/status', async (req, res) => {
   res.json({ success: true, message: 'ອັບເດດສະຖານະສຳເລັດ', status: newStatus, status_label: statusLabel(newStatus) });
 });
 
-function handleUpload(req, res, next) {
-  upload.single('photo')(req, res, (err) => {
-    if (err) {
-      return res.status(400).json({ success: false, error: err.message || 'ອັບໂຫລດຮູບບໍ່ສຳເລັດ' });
-    }
-    next();
-  });
-}
-
-router.post('/:id/photo', handleUpload, async (req, res) => {
+router.post('/:id/photo', handleUploadErrors(upload.single('photo')), async (req, res) => {
   const id = req.params.id;
   const [existing] = await pool.query('SELECT * FROM packages WHERE id = ?', [id]);
   if (!existing.length) return res.status(404).json({ success: false, error: 'ບໍ່ພົບພັດສະດຸ' });

@@ -11,25 +11,33 @@ const emptyForm = { id: null, full_name: '', phone: '', facebook_name: '', provi
 export default function Customers() {
   const [customers, setCustomers] = useState([]);
   const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [modalOpen, setModalOpen] = useState(false);
   const [form, setForm] = useState(emptyForm);
   const toast = useToast();
   const confirm = useConfirm();
   const debounceRef = useRef(null);
 
-  const load = useCallback(async (term = search) => {
-    const res = await api.get(`/customers?search=${encodeURIComponent(term)}&limit=100`);
-    if (res.success) setCustomers(res.customers);
-  }, [search]);
+  const load = useCallback(async (opts = {}) => {
+    const params = new URLSearchParams({
+      search: opts.search ?? search,
+      page: String(opts.page ?? page),
+      limit: '20',
+    });
+    const res = await api.get(`/customers?${params.toString()}`);
+    if (res.success) { setCustomers(res.customers); setTotalPages(res.total_pages || 1); }
+  }, [search, page]);
 
-  useEffect(() => { load(''); }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { load({ page: 1 }); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onSearchChange = (e) => {
     const val = e.target.value;
     setSearch(val);
     clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => load(val), 350);
+    debounceRef.current = setTimeout(() => { setPage(1); load({ page: 1, search: val }); }, 350);
   };
+  const goPage = (p) => { setPage(p); load({ page: p }); };
 
   const openModal = (customer = null) => {
     setForm(customer ? { ...customer } : emptyForm);
@@ -70,7 +78,7 @@ export default function Customers() {
       <div className="card">
         <div className="flex flex-wrap gap-3 justify-between items-center mb-4">
           <input
-            className="flex-1 min-w-[220px] px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+            className="flex-1 min-w-[220px] px-3 py-2 border border-slate-200 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500"
             placeholder="ຄົ້ນຫາ ຊື່ / ເບີໂທ / ລະຫັດ..."
             value={search}
             onChange={onSearchChange}
@@ -87,7 +95,7 @@ export default function Customers() {
             </thead>
             <tbody>
               {customers.length === 0 && (
-                <tr><td colSpan={6} className="text-center text-slate-400 py-6">ບໍ່ມີຂໍ້ມູນ</td></tr>
+                <tr><td colSpan={6} className="text-center text-slate-400 dark:text-slate-500 py-6">ບໍ່ມີຂໍ້ມູນ</td></tr>
               )}
               {customers.map((c) => (
                 <tr key={c.id}>
@@ -105,6 +113,20 @@ export default function Customers() {
             </tbody>
           </table>
         </div>
+
+        {totalPages > 1 && (
+          <div className="flex justify-center gap-2 mt-4">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+              <button
+                key={p}
+                className={`btn btn-sm ${p === page ? 'btn-primary' : 'btn-light'}`}
+                onClick={() => goPage(p)}
+              >
+                {p}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {modalOpen && (

@@ -12,14 +12,27 @@ export default function Track() {
   const [timeline, setTimeline] = useState([]);
   const [companyName, setCompanyName] = useState('ASB LOGISTICS');
   const [companyPhone, setCompanyPhone] = useState('');
+  const [logoPath, setLogoPath] = useState('');
 
   useEffect(() => {
     api.get('/public/settings').then((res) => {
       if (res.success) {
         setCompanyName(res.settings.company_name || 'ASB LOGISTICS');
         setCompanyPhone(res.settings.company_phone || '');
+        setLogoPath(res.settings.company_logo || '');
       }
     });
+  }, []);
+
+  // ໜ້ານີ້ຕັ້ງໃຈໃຫ້ light theme ສະເໝີ — ແຕ່ຂໍ້ຄວາມສ່ວນໃຫຍ່ບໍ່ໄດ້ຕັ້ງສີເອງ, ຈິ່ງ inherit
+  // ສີຈາກ body (index.css) ເຊິ່ງມີ dark:text-slate-100 — ຖ້າ <html> ຍັງມີ class "dark" ຄ້າງຢູ່
+  // (ຜູ້ໃຊ້ເປີດໂໝດສີເຂັ້ມໄວ້ໃນໜ້າອື່ນ) ຂໍ້ຄວາມຈະກາຍເປັນສີຈາງເກືອບຂາວເທິງພື້ນຂາວ ອ່ານບໍ່ອອກ —
+  // ຈິ່ງລຶບ class "dark" ອອກຈາກ <html> ຊົ່ວຄາວຕອນໜ້ານີ້ mount ແລ້ວກັບຄືນເມື່ອອອກ
+  useEffect(() => {
+    const root = document.documentElement;
+    const hadDark = root.classList.contains('dark');
+    root.classList.remove('dark');
+    return () => { if (hadDark) root.classList.add('dark'); };
   }, []);
 
   const doTrack = async (searchCode = code) => {
@@ -45,14 +58,14 @@ export default function Track() {
     <div className="min-h-screen" style={{ background: 'linear-gradient(180deg,#181818 0%,#181818 220px,#f4f5f7 220px)' }}>
       <div className="max-w-xl mx-auto px-4 pt-8 pb-16">
         <div className="flex items-center gap-3 text-white mb-6">
-          <div className="w-12 h-12 rounded-xl bg-amber-400 text-slate-900 font-extrabold flex items-center justify-center">ASB</div>
+          <img src={logoPath ? `/${logoPath}` : '/logo.jpg'} alt="ASB Logistics" className="w-12 h-12 rounded-xl object-cover flex-shrink-0" />
           <div>
             <div className="font-extrabold text-[1.05rem]">{companyName}</div>
             <div className="text-xs text-white/55">ຕິດຕາມສະຖານະພັດສະດຸຂອງທ່ານ</div>
           </div>
         </div>
 
-        <div className="card">
+        <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-5 text-slate-800">
           <div className="flex gap-2">
             <input
               className="flex-1 px-3.5 py-2.5 border border-slate-200 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-teal-500"

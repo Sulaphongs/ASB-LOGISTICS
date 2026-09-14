@@ -21,11 +21,11 @@ export default function Dashboard() {
     <Layout title="Dashboard">
       <div className="card mb-5">
         <h2 className="text-base font-bold mb-1">ສະບາຍດີ, {user?.full_name || user?.username}</h2>
-        <p className="text-sm text-slate-500">ພາບລວມການຂົນສົ່ງ ASB ມື້ນີ້</p>
+        <p className="text-sm text-slate-500 dark:text-slate-400">ພາບລວມການຂົນສົ່ງ ASB ມື້ນີ້</p>
       </div>
 
       {!stats ? (
-        <div className="text-slate-400 text-sm">ກຳລັງໂຫຼດ...</div>
+        <div className="text-slate-400 dark:text-slate-500 text-sm">ກຳລັງໂຫຼດ...</div>
       ) : (
         <>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
@@ -50,7 +50,7 @@ export default function Dashboard() {
                   </thead>
                   <tbody>
                     {stats.recent_packages.length === 0 && (
-                      <tr><td colSpan={4} className="text-center text-slate-400 py-4">ຍັງບໍ່ມີພັດສະດຸ</td></tr>
+                      <tr><td colSpan={4} className="text-center text-slate-400 dark:text-slate-500 py-4">ຍັງບໍ່ມີພັດສະດຸ</td></tr>
                     )}
                     {stats.recent_packages.map((p) => (
                       <tr key={p.id}>
@@ -75,7 +75,7 @@ export default function Dashboard() {
                 {stats.status_breakdown.map((s) => (
                   <div key={s.status} className="flex items-center justify-between">
                     <Badge status={s.status}>{s.label}</Badge>
-                    <span className="font-bold text-slate-700">{s.count}</span>
+                    <span className="font-bold text-slate-700 dark:text-slate-200">{s.count}</span>
                   </div>
                 ))}
               </div>

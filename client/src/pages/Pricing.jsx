@@ -90,10 +90,10 @@ export default function Pricing() {
           <div className="field"><label>ຄ່າອື່ນໆ (ຖ້າມີ)</label><input type="number" step="0.01" value={calcOther} onChange={(e) => { setCalcOther(e.target.value); calc(calcRuleId, calcWeight, calcVolume, e.target.value); }} /></div>
 
           {calcResult && !calcResult.error && (
-            <div className="mt-4 p-4 bg-slate-50 rounded-xl text-sm space-y-1.5">
+            <div className="mt-4 p-4 bg-slate-50 dark:bg-slate-700/40 rounded-xl text-sm space-y-1.5">
               <div className="flex justify-between"><span>ຄ່າຂົນສົ່ງ:</span><strong>{formatMoney(calcResult.shipping_fee, calcResult.currency)}</strong></div>
               <div className="flex justify-between"><span>ຄ່າອື່ນໆ:</span><strong>{formatMoney(calcResult.other_fee, calcResult.currency)}</strong></div>
-              <div className="flex justify-between text-base pt-2 border-t border-slate-200"><span>ລວມທັງໝົດ:</span><strong>{formatMoney(calcResult.total_fee, calcResult.currency)}</strong></div>
+              <div className="flex justify-between text-base pt-2 border-t border-slate-200 dark:border-slate-700"><span>ລວມທັງໝົດ:</span><strong>{formatMoney(calcResult.total_fee, calcResult.currency)}</strong></div>
             </div>
           )}
           {calcResult?.error && <div className="mt-4 text-rose-600 text-sm">{calcResult.error}</div>}
@@ -105,14 +105,14 @@ export default function Pricing() {
             {isAdmin && <button className="btn btn-primary btn-sm" onClick={() => openModal()}><Plus className="w-4 h-4" /> ເພີ່ມ</button>}
           </div>
           <div className="space-y-1">
-            {rules.length === 0 && <p className="text-sm text-slate-400">ຍັງບໍ່ມີກົດເກນລາຄາ</p>}
+            {rules.length === 0 && <p className="text-sm text-slate-400 dark:text-slate-500">ຍັງບໍ່ມີກົດເກນລາຄາ</p>}
             {rules.map((r) => (
-              <div key={r.id} className="flex justify-between items-center py-2.5 border-b border-slate-100 last:border-0">
+              <div key={r.id} className="flex justify-between items-center py-2.5 border-b border-slate-100 dark:border-slate-700 last:border-0">
                 <div>
                   <div className="font-semibold text-sm flex items-center gap-2">
                     {r.name} {!!r.is_default && <Badge status="delivered">ຄ່າເລີ່ມຕົ້ນ</Badge>}
                   </div>
-                  <div className="text-xs text-slate-500">
+                  <div className="text-xs text-slate-500 dark:text-slate-400">
                     {r.shipping_type === 'land' ? 'ທາງບົກ' : 'ທາງອາກາດ'} · {Number(r.rate).toLocaleString()} {r.currency} / {r.calc_method === 'per_kg' ? 'kg' : 'cbm'} · ຂັ້ນຕ່ຳ {Number(r.min_charge).toLocaleString()}
                   </div>
                 </div>

@@ -5,7 +5,7 @@ import Badge from '../components/Badge.jsx';
 import { api, formatMoney } from '../api/client.js';
 import { useToast } from '../components/Toast.jsx';
 import { useConfirm } from '../components/Confirm.jsx';
-import { Plus, Eye, Printer, Trash2, X, Save } from 'lucide-react';
+import { Plus, Eye, Printer, Trash2, X, Save, SquarePen } from 'lucide-react';
 
 const STATUS_OPTIONS = [
   ['ordered', 'ສັ່ງແລ້ວ (ລໍຖ້າຮ້ານຈີນຈັດສົ່ງ)'],
@@ -30,6 +30,8 @@ export default function Packages() {
   const [rulesList, setRulesList] = useState([]);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [modalOpen, setModalOpen] = useState(false);
   const [form, setForm] = useState(emptyForm);
   const toast = useToast();
@@ -45,27 +47,37 @@ export default function Packages() {
     if (pr.success) setRulesList(pr.rules.filter((r) => r.status === 'active'));
   }, []);
 
-  const load = useCallback(async (s = search, st = statusFilter) => {
-    const params = new URLSearchParams({ search: s, status: st, limit: '100' });
+  const load = useCallback(async (opts = {}) => {
+    const params = new URLSearchParams({
+      search: opts.search ?? search,
+      status: opts.status ?? statusFilter,
+      page: String(opts.page ?? page),
+      limit: '20',
+    });
     const res = await api.get(`/packages?${params.toString()}`);
-    if (res.success) setPackages(res.packages);
-  }, [search, statusFilter]);
+    if (res.success) { setPackages(res.packages); setTotalPages(res.total_pages || 1); }
+  }, [search, statusFilter, page]);
 
-  useEffect(() => { loadLookups(); load('', ''); }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { loadLookups(); load({ page: 1 }); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onSearchChange = (e) => {
     const val = e.target.value;
     setSearch(val);
     clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => load(val, statusFilter), 350);
+    debounceRef.current = setTimeout(() => { setPage(1); load({ page: 1, search: val }); }, 350);
   };
   const onStatusFilterChange = (e) => {
     const val = e.target.value;
     setStatusFilter(val);
-    load(search, val);
+    setPage(1);
+    load({ page: 1, status: val });
   };
+  const goPage = (p) => { setPage(p); load({ page: p }); };
 
-  const openModal = () => { setForm(emptyForm); setModalOpen(true); };
+  const openModal = (pkg = null) => {
+    setForm(pkg ? { ...emptyForm, ...pkg, pricing_rule_id: pkg.pricing_rule_id || '' } : emptyForm);
+    setModalOpen(true);
+  };
   const closeModal = () => setModalOpen(false);
   const setField = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }));
 
@@ -119,13 +131,13 @@ export default function Packages() {
         <div className="flex flex-wrap gap-3 justify-between items-center mb-4">
           <div className="flex flex-wrap gap-2 flex-1 min-w-[240px]">
             <input
-              className="flex-1 min-w-[220px] px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+              className="flex-1 min-w-[220px] px-3 py-2 border border-slate-200 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500"
               placeholder="ຄົ້ນຫາ ລະຫັດຕິດຕາມ / ລູກຄ້າ / ເບີໂທ..."
               value={search}
               onChange={onSearchChange}
             />
             <select
-              className="px-3 py-2 border border-slate-200 rounded-xl text-sm"
+              className="px-3 py-2 border border-slate-200 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100"
               value={statusFilter}
               onChange={onStatusFilterChange}
             >
@@ -133,7 +145,7 @@ export default function Packages() {
               {STATUS_OPTIONS.map(([k, v]) => <option key={k} value={k}>{v}</option>)}
             </select>
           </div>
-          <button className="btn btn-primary" onClick={openModal}><Plus className="w-4 h-4" /> ສ້າງອອເດີໃໝ່</button>
+          <button className="btn btn-primary" onClick={() => openModal()}><Plus className="w-4 h-4" /> ສ້າງອອເດີໃໝ່</button>
         </div>
 
         <div className="overflow-x-auto">
@@ -146,15 +158,15 @@ export default function Packages() {
             </thead>
             <tbody>
               {packages.length === 0 && (
-                <tr><td colSpan={8} className="text-center text-slate-400 py-6">ບໍ່ມີຂໍ້ມູນ</td></tr>
+                <tr><td colSpan={8} className="text-center text-slate-400 dark:text-slate-500 py-6">ບໍ່ມີຂໍ້ມູນ</td></tr>
               )}
               {packages.map((p) => (
                 <tr key={p.id}>
                   <td>
                     <Link to={`/packages/${p.id}`} className="font-semibold text-teal-700 hover:underline">{p.tracking_code}</Link>
-                    {p.china_tracking_no && <div className="text-[11px] text-slate-400">CN: {p.china_tracking_no}</div>}
+                    {p.china_tracking_no && <div className="text-[11px] text-slate-400 dark:text-slate-500">CN: {p.china_tracking_no}</div>}
                   </td>
-                  <td>{p.customer_name}<div className="text-[11px] text-slate-400">{p.customer_phone}</div></td>
+                  <td>{p.customer_name}<div className="text-[11px] text-slate-400 dark:text-slate-500">{p.customer_phone}</div></td>
                   <td>{p.item_description || '-'}</td>
                   <td>{p.weight_kg ? `${p.weight_kg} kg` : '-'}</td>
                   <td>{formatMoney(p.total_fee, p.currency)}</td>
@@ -162,6 +174,7 @@ export default function Packages() {
                   <td><Badge status={p.status}>{p.status_label}</Badge></td>
                   <td className="text-right space-x-1.5">
                     <Link to={`/packages/${p.id}`} className="btn btn-light btn-sm"><Eye className="w-4 h-4" /> ເບິ່ງ</Link>
+                    <button className="btn btn-light btn-sm" onClick={() => openModal(p)}><SquarePen className="w-4 h-4" /> ແກ້ໄຂ</button>
                     <Link to={`/packages/${p.id}/label`} target="_blank" className="btn btn-light btn-sm" aria-label="ພິມໃບຕິດ"><Printer className="w-4 h-4" /></Link>
                     <button className="btn btn-danger btn-sm" onClick={() => handleDelete(p)}><Trash2 className="w-4 h-4" /> ລຶບ</button>
                   </td>
@@ -170,12 +183,26 @@ export default function Packages() {
             </tbody>
           </table>
         </div>
+
+        {totalPages > 1 && (
+          <div className="flex justify-center gap-2 mt-4">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+              <button
+                key={p}
+                className={`btn btn-sm ${p === page ? 'btn-primary' : 'btn-light'}`}
+                onClick={() => goPage(p)}
+              >
+                {p}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {modalOpen && (
         <div className="modal-backdrop">
           <div className="modal-box max-w-xl">
-            <h3 className="text-base font-bold mb-4">ສ້າງອອເດີໃໝ່</h3>
+            <h3 className="text-base font-bold mb-4">{form.id ? 'ແກ້ໄຂພັດສະດຸ' : 'ສ້າງອອເດີໃໝ່'}</h3>
             <form onSubmit={handleSubmit} className="space-y-3">
               <div className="field">
                 <label>ລູກຄ້າ *</label>

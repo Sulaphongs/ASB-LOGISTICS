@@ -94,27 +94,27 @@ export default function DatePicker({ value, onChange, className = '', placeholde
       <button
         type="button"
         onClick={openPicker}
-        className={`inline-flex items-center gap-2 px-3 py-2 border border-slate-200 rounded-xl text-sm bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${className}`}
+        className={`inline-flex items-center gap-2 px-3 py-2 border border-slate-200 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${className}`}
       >
-        <CalendarDays className="w-4 h-4 text-slate-400 flex-shrink-0" aria-hidden="true" />
-        <span className={display ? 'text-slate-700' : 'text-slate-400'}>{display || placeholder}</span>
+        <CalendarDays className="w-4 h-4 text-slate-400 dark:text-slate-500 flex-shrink-0" aria-hidden="true" />
+        <span className={display ? 'text-slate-700 dark:text-slate-200' : 'text-slate-400 dark:text-slate-500'}>{display || placeholder}</span>
       </button>
 
       {open && (
-        <div className="absolute z-30 mt-2 w-72 bg-white border border-slate-200 rounded-2xl shadow-lg p-3">
+        <div className="absolute z-30 mt-2 w-72 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-lg p-3">
           <div className="flex items-center justify-between mb-2">
-            <button type="button" onClick={prevMonth} className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-slate-100" aria-label="ເດືອນກ່ອນ">
+            <button type="button" onClick={prevMonth} className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200" aria-label="ເດືອນກ່ອນ">
               <ChevronLeft className="w-4 h-4" />
             </button>
-            <div className="text-sm font-bold">{LAO_MONTHS[viewMonth]} {viewYear}</div>
-            <button type="button" onClick={nextMonth} className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-slate-100" aria-label="ເດືອນຖັດໄປ">
+            <div className="text-sm font-bold text-slate-800 dark:text-slate-100">{LAO_MONTHS[viewMonth]} {viewYear}</div>
+            <button type="button" onClick={nextMonth} className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200" aria-label="ເດືອນຖັດໄປ">
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
 
           <div className="grid grid-cols-7 gap-1 mb-1">
             {LAO_WEEKDAYS.map((w) => (
-              <div key={w} className="text-center text-[11px] font-semibold text-slate-400 py-1">{w}</div>
+              <div key={w} className="text-center text-[11px] font-semibold text-slate-400 dark:text-slate-500 py-1">{w}</div>
             ))}
           </div>
 
@@ -127,12 +127,12 @@ export default function DatePicker({ value, onChange, className = '', placeholde
                 onClick={() => selectDay(c.d)}
                 className={`w-8 h-8 flex items-center justify-center rounded-lg text-sm transition-colors ${
                   c.outside
-                    ? 'text-slate-300 cursor-default'
+                    ? 'text-slate-300 dark:text-slate-600 cursor-default'
                     : isSelected(c)
                       ? 'bg-teal-600 text-white font-semibold hover:bg-teal-600'
                       : isToday(c)
-                        ? 'border border-teal-500 text-teal-700 hover:bg-teal-50'
-                        : 'text-slate-700 hover:bg-slate-100'
+                        ? 'border border-teal-500 text-teal-700 dark:text-teal-300 hover:bg-teal-50 dark:hover:bg-teal-500/10'
+                        : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700'
                 }`}
               >
                 {c.d}
@@ -140,10 +140,10 @@ export default function DatePicker({ value, onChange, className = '', placeholde
             ))}
           </div>
 
-          <div className="flex justify-between mt-3 pt-2 border-t border-slate-100">
-            <button type="button" onClick={goToday} className="text-xs font-semibold text-teal-700 hover:underline">ມື້ນີ້</button>
+          <div className="flex justify-between mt-3 pt-2 border-t border-slate-100 dark:border-slate-700">
+            <button type="button" onClick={goToday} className="text-xs font-semibold text-teal-700 dark:text-teal-300 hover:underline">ມື້ນີ້</button>
             {!!value && (
-              <button type="button" onClick={clear} className="text-xs font-semibold text-slate-400 hover:text-rose-500">ລ້າງ</button>
+              <button type="button" onClick={clear} className="text-xs font-semibold text-slate-400 dark:text-slate-500 hover:text-rose-500 dark:hover:text-rose-400">ລ້າງ</button>
             )}
           </div>
         </div>

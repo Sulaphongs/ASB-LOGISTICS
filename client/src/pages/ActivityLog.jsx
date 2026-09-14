@@ -54,12 +54,12 @@ export default function ActivityLog() {
       <div className="card">
         <div className="flex flex-wrap gap-2 mb-4">
           <input
-            className="flex-1 min-w-[200px] px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+            className="flex-1 min-w-[200px] px-3 py-2 border border-slate-200 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500"
             placeholder="ຄົ້ນຫາ ລາຍລະອຽດ / ຜູ້ໃຊ້..."
             value={search}
             onChange={onSearchChange}
           />
-          <select className="px-3 py-2 border border-slate-200 rounded-xl text-sm" value={module} onChange={onModuleChange}>
+          <select className="px-3 py-2 border border-slate-200 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100" value={module} onChange={onModuleChange}>
             <option value="">ທຸກໂມດູນ</option>
             {Object.entries(MODULE_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
           </select>
@@ -73,7 +73,7 @@ export default function ActivityLog() {
               <tr><th>ເວລາ</th><th>ຜູ້ໃຊ້</th><th>ໂມດູນ</th><th>ປະເພດ</th><th>ລາຍລະອຽດ</th></tr>
             </thead>
             <tbody>
-              {logs.length === 0 && <tr><td colSpan={5} className="text-center text-slate-400 py-6">ບໍ່ມີຂໍ້ມູນ</td></tr>}
+              {logs.length === 0 && <tr><td colSpan={5} className="text-center text-slate-400 dark:text-slate-500 py-6">ບໍ່ມີຂໍ້ມູນ</td></tr>}
               {logs.map((l) => (
                 <tr key={l.id}>
                   <td className="whitespace-nowrap text-xs">{new Date(l.created_at).toLocaleString('lo-LA')}</td>
